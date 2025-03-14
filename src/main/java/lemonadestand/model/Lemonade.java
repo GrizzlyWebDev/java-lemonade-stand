@@ -20,10 +20,6 @@ public class Lemonade {
 		this.water = water;
 		this.sugar = sugar;
 		this.iceCubes = iceCubes;
-		calculatePrice();
-	}
-	
-	private void calculatePrice() {
 		price = (lemonJuice * .3) + (sugar * .15) + (CUP * .50);
 	}
 
