@@ -1,6 +1,9 @@
 package lemonadestand;
 
-import java.text.DecimalFormat;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 import lemonadestand.model.Customer;
@@ -9,17 +12,14 @@ import lemonadestand.model.Order;
 
 public class Application {
 
-    private static final int LINE_LENGTH = 54;
-    private static final String ASTERISK_LINE = "*".repeat(LINE_LENGTH);
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        printAsteriskLine();
+        OrderUtils.printAsteriskLine();
         System.out.println("*                                                    *");
         System.out.println("*           WELCOME TO THE LEMONADE STAND!           *");
         System.out.println("*                                                    *");
-        printAsteriskLine();
+        OrderUtils.printAsteriskLine();
         System.out.println("\nEnter your name and number to start your order!\n");
         System.out.println("Let's begin with your name:");
 
@@ -30,13 +30,13 @@ public class Application {
 
         String phoneNumber = scanner.nextLine();
 
-        System.out.println("\nAwesome! We captured your phone number as: " + formatPhoneNumber(phoneNumber) + "\n");
+        System.out.println("\nAwesome! We captured your phone number as: " + OrderUtils.formatPhoneNumber(phoneNumber) + "\n");
         System.out.println("Is everything correct so far?");
 
         String validation = "";
 
         do {
-            if (validation.equals("N")) {
+            if (validation.equalsIgnoreCase("N")) {
                 System.out.println("\nPlease re-enter your information.\n");
                 System.out.println("Enter your Name:");
                 name = scanner.nextLine();
@@ -44,11 +44,11 @@ public class Application {
                 phoneNumber = scanner.nextLine();
                 System.out.println("\nIs the updated information correct?\n");
                 System.out.println("Name: " + name);
-                System.out.println("Number: " + formatPhoneNumber(phoneNumber) + "\n");
+                System.out.println("Number: " + OrderUtils.formatPhoneNumber(phoneNumber) + "\n");
             }
             System.out.println("Please enter 'Y' for yes or 'N' for no.");
             validation = scanner.nextLine();
-        } while (!validation.equals("Y"));
+        } while (!validation.equalsIgnoreCase("Y"));
 
         System.out.println("\nGreat! Let's get to your order then...\n");
 
@@ -70,40 +70,23 @@ public class Application {
             order.addLemonade(new Lemonade(lemonJuice, water, sugar, iceCubes));
         }
 
-        DecimalFormat df = new DecimalFormat("#.00");
+        File file = new File("./orders");
 
-        System.out.println("\nThank you for your order !\n");
-        printAsteriskLine();
-        printLineWithAsterisks("* Total for " + customer.getName() + "'s order: $" + df.format(order.getTotal()));
-        System.out.println("*                                                    *");
-        int lemonadeCount = 1;
-        for (Lemonade lemonade : order.getLemonades()) {
-            printLineWithAsterisks("* Lemonade #" + lemonadeCount);
-            System.out.println("*                                                    *");
+        File[] files = file.listFiles();
 
-            printLineWithAsterisks("* LemonJuice: " + df.format(lemonade.getLemonJuice()));
-            printLineWithAsterisks("* Water: " + df.format(lemonade.getWater()));
-            printLineWithAsterisks("* Sugar: " + df.format(lemonade.getSugar()));
-            printLineWithAsterisks("* Ice Cubes: " + lemonade.getIceCubes());
-            printLineWithAsterisks("* Price: $" + df.format(lemonade.getPrice()));
+        FileOutputStream fileOutputStream;
+        try {
+            fileOutputStream = new FileOutputStream(file + "/order" + (files.length + 1) + ".txt");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
-            System.out.println("*                                                    *");
-            printAsteriskLine();
-            lemonadeCount++;
+            objectOutputStream.writeObject(order);
+        } catch (IOException e) {
+            System.out.println("Failed to create file. Please ensure orders directory exists.");
         }
+
+        OrderUtils.formatOrder(order);
 
         scanner.close();
     }
 
-    private static void printAsteriskLine() {
-        System.out.println(ASTERISK_LINE);
-    }
-
-    private static void printLineWithAsterisks(String content) {
-        System.out.println(content + " ".repeat(LINE_LENGTH - content.length() - 1) + "*");
-    }
-
-    private static String formatPhoneNumber(String phoneNumber) {
-        return phoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
-    }
 }

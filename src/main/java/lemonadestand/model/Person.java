@@ -1,9 +1,11 @@
 package lemonadestand.model;
 
-public interface Person {
-	
-	default String getName() {
-		return "John Doe";
-	}
+import java.io.Serializable;
+
+public interface Person extends Serializable {
+
+    default String getName() {
+        return "John Doe";
+    }
 
 }
