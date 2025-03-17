@@ -1,10 +1,10 @@
 package lemonadestand;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.Scanner;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lemonadestand.model.Customer;
 import lemonadestand.model.Lemonade;
@@ -74,14 +74,11 @@ public class Application {
 
         File[] files = file.listFiles();
 
-        FileOutputStream fileOutputStream;
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            fileOutputStream = new FileOutputStream(file + "/order" + (files.length + 1) + ".txt");
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-
-            objectOutputStream.writeObject(order);
+            objectMapper.writeValue(new File(file + "/order" + (files.length + 1) + ".json"), order);
         } catch (IOException e) {
-            System.out.println("Failed to create file. Please ensure orders directory exists.");
+            e.printStackTrace();
         }
 
         OrderUtils.formatOrder(order);

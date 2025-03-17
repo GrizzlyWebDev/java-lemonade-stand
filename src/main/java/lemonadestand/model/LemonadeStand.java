@@ -2,23 +2,26 @@ package lemonadestand.model;
 
 public class LemonadeStand {
 
-	String name;
+    String name;
 
-	public LemonadeStand(String name) {
-		this.name = name;
-	}
+    public LemonadeStand(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public LemonadeStand() {
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String toString() {
-		return "LemonadeStand {name=" + name + "}";
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "LemonadeStand {name=" + name + "}";
+    }
 
 }

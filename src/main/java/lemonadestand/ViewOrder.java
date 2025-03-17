@@ -1,11 +1,10 @@
 package lemonadestand;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Scanner;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lemonadestand.model.Order;
 
@@ -23,26 +22,19 @@ public class ViewOrder {
             int orderNumber = scanner.nextInt();
             scanner.nextLine();
 
-            FileInputStream fileInputStream;
+            ObjectMapper objectMapper = new ObjectMapper();
             try {
-                fileInputStream = new FileInputStream(file + "/order" + orderNumber + ".txt");
-                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-
-                Order order = (Order) objectInputStream.readObject();
+                Order order = objectMapper.readValue(new File(file + "/order" + orderNumber + ".json"), Order.class);
                 OrderUtils.formatOrder(order);
-            } catch (FileNotFoundException e) {
-                System.out.println("Order with number " + orderNumber + " doesn't exist.");
             } catch (IOException e) {
-                System.out.println("Internal IOException.");
-            } catch (ClassNotFoundException e) {
-                System.out.println("Tried to read in an order that isn't formatted correctly.");
-            } catch (ClassCastException e) {
-                System.out.println("The file read doesn't contain an order.");
+                e.printStackTrace();
             }
 
             System.out.println("Ready to exit? type 'Y' for yes.");
             exit = scanner.nextLine();
         } while (!exit.equalsIgnoreCase("Y"));
+
+        scanner.close();
     }
 
 }

@@ -16,8 +16,23 @@ public class Customer implements Person {
         this.phoneNumber = phoneNumber;
     }
 
+    public Customer() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
@@ -61,10 +76,6 @@ public class Customer implements Person {
             return false;
         }
         return true;
-    }
-
-    public String getName() {
-        return name;
     }
 
 }

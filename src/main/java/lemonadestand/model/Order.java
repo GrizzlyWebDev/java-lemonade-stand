@@ -21,6 +21,9 @@ public class Order implements Serializable {
         total = 0.0;
     }
 
+    public Order() {
+    }
+
     public void addLemonade(Lemonade lemonade) {
         lemonades.add(lemonade);
         total += lemonade.getPrice();
@@ -33,6 +36,10 @@ public class Order implements Serializable {
         }
     }
 
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
@@ -41,8 +48,16 @@ public class Order implements Serializable {
         return lemonades;
     }
 
+    public void setLemonades(List<Lemonade> lemonades) {
+        this.lemonades = lemonades;
+    }
+
     public double getTotal() {
         return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     @Override
